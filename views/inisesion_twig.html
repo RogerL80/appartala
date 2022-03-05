@@ -1,0 +1,66 @@
+{% extends 'default_layout.html'%}
+
+{% block estilos %}
+<style>
+  body {
+    /* Ubicación de la imagen */                        
+    background-image: url(./img/fondo.jpg);
+    /* Para dejar la imagen de fondo centrada, vertical y
+        horizontalmente */
+    background-position: center center;   
+    /* Para que la imagen de fondo no se repita */
+    background-repeat: no-repeat;   
+    /* La imagen se fija en la ventana de visualización para que la altura de
+       la imagen no supere a la del contenido */
+    background-attachment: fixed;   
+    /* La imagen de fondo se reescala automáticamente con el cambio del ancho
+        de ventana del navegador */
+    background-size: cover;   
+    /* Se muestra un color de fondo mientras se está cargando la imagen
+       de fondo o si hay problemas para cargarla */
+    background-color: white;
+  }
+  @media only screen and (max-width: 767px) {
+  body {
+    background-image: url(./img/fondo-moviles.jpg);
+  }
+}
+</style>
+{% endblock %}
+
+{% block navbarselect %}
+<li><a href="./index.php">Inicio</a></li>
+<li><a href="./perfil.php">Perfil</a></li>
+<li><a href="./selCancha.php">Reservar</a></li>
+<li><a href="./contacto.php">Contáctanos</a></li>
+{% endblock %}
+
+{% block contenidos %}
+<div class="jumbotron login">	
+	<form action="./server/sesion_ini.php" method="post" id="fsesion">
+		<fieldset>
+			<legend class="text-center">Administra tus Canchas</legend>
+{% if alerta != "" %}
+				<center><label>Ya hay una sesion abierta</label></center>
+        <div class="row">
+				<center><a href="./server/destruir.php">Cerrar sesion </a>-<a href="./estable.php"> Ir a Perfil</a></center>
+        </div>
+{% else %}
+				<div class="form-group">
+					<label for="email" class="mover">E-mail(*): </label>
+					<input type="email" class="form-control inputlogin" name="email" placeholder="example@server.com" pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}" required {% if alerta != "" %} disabled {% endif %}>			
+				</div>
+				<div class="form-group">
+					<label for="pw" class="mover">Password : </label>
+					<input type="password" class="form-control inputlogin" name="pw" required {% if alerta != "" %} disabled {% endif %}>
+				</div>
+				<input type="submit" class="btn btn-success mover" name="" value="Ingresar" {% if alerta != "" %} disabled {% endif %}>	
+				<input type="reset" class="btn btn-success mover" name="" value="Restablecer" {% if alerta != "" %} disabled {% endif %}><br>		
+				<a class="mover" href="./recordares.php" {% if alerta != "" %} onclick="return false" {% endif %}>¿Olvidaste tu contraseña?</a><br/>
+				<a class="mover" href="./regi_estable.php" {% if alerta != "" %} onclick="return false" {% endif %}>Registrate</a>
+{% endif %}
+		</fieldset>
+	</form>        	
+</div>
+
+{% endblock %}

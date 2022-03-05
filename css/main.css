@@ -1,0 +1,434 @@
+/*! HTML5 Boilerplate v4.3.0 | MIT License | http://h5bp.com/ */
+
+html,
+button,
+input,
+select,
+textarea {
+    color: #222;
+}
+
+html {
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+::-moz-selection {
+    background: #b3d4fc;
+    text-shadow: none;
+}
+
+::selection {
+    background: #b3d4fc;
+    text-shadow: none;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+}
+
+audio,
+canvas,
+img,
+video {
+    vertical-align: middle;
+}
+
+fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.browsehappy {
+    margin: 0.2em 0;
+    background: #ccc;
+    color: #000;
+    padding: 0.2em 0;
+}
+
+
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+
+@font-face {
+    font-family: "Haettenschweiler";
+    src: url(../fonts/Haettenschweiler.ttf) format("truetype");
+}
+
+html, body {    
+   height: 100%; 
+}
+.verde{
+    background-color: #5cb85c;
+    color: white;
+    font-style: bold;
+}
+
+.lineas{
+  border: green 5px solid;
+}
+
+
+hr {
+  color: #5cb85c;
+  border: 0;
+  width: 80%;
+  background-color: #5cb85c;
+  height: 1px;
+}
+.logo{
+  margin-top: -5px;
+}
+#container {
+   min-height: 100%;
+   margin-bottom: -330px;
+   position: relative;
+}
+#footer {
+  font-family: "Haettenschweiler";
+  font-size: 15px;
+  position: relative;
+  color: white;
+  background-color: black;
+}
+.icono{
+  font-family: "Haettenschweiler";
+  font-size: 40px;
+  color: white;
+}
+.icono .verd{
+  color: #41a248;
+  font-size: 50px;
+}
+.clearfooter {
+   height: 330px;
+   clear: both;
+}
+.borde-tabla{
+  border-color: green;
+}
+/* PARA COLOCAR MENU RESPONSIVE A LA IZQU */
+.custom-navbar .navbar-btn .navbar-right {
+        float: right;
+      margin-right: 0;
+      padding-left: 10px;
+    }
+
+@media (max-width:767px) {
+    .custom-navbar .navbar-btn .navbar-right {
+        float: left;
+        padding-left: 10px;
+          margin-top: -7.5px;
+    }
+    .custom-navbar .navbar-btn .navbar-right {
+        float: left;
+        padding-left: 10px;
+          margin-top: -7.5px;
+    }
+    .custom-navbar .nav.navbar-nav.navbar-right li {
+        // float: left;
+    }
+    .custom-navbar .nav.navbar-nav.navbar-right ul> li > a > ul> li > a {
+        padding:8px 5px;
+    }
+    .custom-navbar .navbar-toggle {
+        float: left;
+      margin-right: 0
+    }
+    .custom-navbar .navbar-header {
+        float: left;
+        width: auto!important;
+    }
+    .custom-navbar .navbar-collapse {
+        clear: both;
+        float: none;
+    }
+    ul > li > a {
+        float: none;
+    }
+    .inputlogin{
+      width: 90%;
+      margin-left: 10px;
+    }
+    .mover{
+      margin-left: 10px;
+    }
+}
+/** FIN MENU RESPONSIVO A LA IZQ*/
+/* Botón propio
+-------------------------------------------------- */
+ 
+/* Redefine los estilos de .btn */
+/* Modificar el texto y el color de fondo en los tres estados
+   principales del botón: default, hover y active. */
+.btn-ttc,
+.btn-ttc:hover,
+.btn-ttc:active {
+  color: white;
+  text-shadow:5px 6px 5px #000000;
+  background-color: rgba(180, 200, 255, 0.2);
+}
+/* Aplicar gradientes de colores */
+/* Nota: no se muestran aquí todos los gradientes que tendrás que
+   definir para los diferentes navegadores. */
+.btn-ttc {
+  background-repeat: repeat-x;
+  background-image: blue; /* For browsers that do not support gradients */
+  background-image: -webkit-linear-gradient(to right, rgba(180, 200, 255, 0.1), rgba(255, 255, 255, 0));/*Safari 5.1-6*/
+  background-image: -o-linear-gradient(to right, rgba(180, 200, 255, 0.1), rgba(255, 255, 255, 0));/*Opera 11.1-12*/
+  background-image: -moz-linear-gradient(to right, rgba(180, 200, 255, 0.1), rgba(255, 255, 255, 0));/*Fx 3.6-15*/
+  background-image: linear-gradient(to right, rgba(180, 200, 255, 0.1), rgba(255, 255, 255, 0));/*Standard*/  
+}
+/* Estilos del estado :hover del botón */
+/* Uno de los estilos más sencillos y eficaces para el estado :hover
+   consiste en subir hacia arriba ligeramente la imagen de fondo del
+   botón, pero puedes definir otros estilos adicionales si quieres. */
+.btn-ttc:hover {
+  background-position: 0 -15px;
+}
+header{
+    background-color: white;
+}
+.map-container{
+    display: block;
+    position: relative;
+    padding-bottom: 48%;
+    padding-top: 30px;
+    height: 400px;
+    overflow: hidden;
+}
+#map-canvas{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-border-radius: 7px 7px 7px 7px;
+  border-radius: 7px 7px 7px 7px;
+  border: white 5px solid;
+}
+.ubicacion{
+  color: green;
+  font-style: bold; 
+}
+.login{
+    border-radius: 4px;
+    margin: 100px auto;
+    width: 305px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+}
+
+.thumb{
+    height: 200px;
+    width: 90%;
+    border: 1px solid #000;
+    margin: 10px 5px ;
+}
+/* ==========================================================================
+  ESTILOS PARA EL HORARIO DE RESERVAS*/
+.libre{
+  font-size: 11px;
+  color: black;
+  background: white;
+  cursor: pointer;
+}
+.libre:hover{
+  border-color: green;
+}
+.fpasada{
+  background: #E0E0E0;
+  cursor: not-allowed;
+}
+.reservado{
+  background: #5cb85c;
+  font-style: bold;
+  color: white;
+}
+.preapartado{
+  background: #f0ad4e;
+  font-style: bold;
+  color: white;
+}
+.propia{
+  background: #337ab7;
+  font-style: bold;
+  color: white;
+}
+.seleccionado{
+  background: #b5e61c;
+  font-style: bold;
+  color: white;
+}
+
+.advertencia{
+  color: orange;
+}
+.peligro{
+  color: red;
+}
+
+.exitoso{
+  color: green;
+}
+#alerta img{
+  display: none;
+}
+
+output img{
+  max-width: 100%;
+}
+/* ==========================================================================
+   Media Queries
+   ========================================================================== */
+
+@media only screen and (min-width: 35em) {
+
+}
+
+@media print,
+       (-o-min-device-pixel-ratio: 5/4),
+       (-webkit-min-device-pixel-ratio: 1.25),
+       (min-resolution: 120dpi) {
+
+}
+
+/* ==========================================================================
+   Helper classes
+   ========================================================================== */
+
+.ir {
+    background-color: transparent;
+    border: 0;
+    overflow: hidden;
+    *text-indent: -9999px;
+}
+
+.ir:before {
+    content: "";
+    display: block;
+    width: 0;
+    height: 150%;
+}
+
+.hidden {
+    display: none !important;
+    visibility: hidden;
+}
+
+.visuallyhidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+.visuallyhidden.focusable:active,
+.visuallyhidden.focusable:focus {
+    clip: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    position: static;
+    width: auto;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+.clearfix:before,
+.clearfix:after {
+    content: " ";
+    display: table;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+.clearfix {
+    *zoom: 1;
+}
+
+/* ==========================================================================
+   Print styles
+   ========================================================================== */
+
+@media print {
+    * {
+        background: transparent !important;
+        color: #000 !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    a,
+    a:visited {
+        text-decoration: underline;
+    }
+
+    a[href]:after {
+        content: " (" attr(href) ")";
+    }
+
+    abbr[title]:after {
+        content: " (" attr(title) ")";
+    }
+
+    .ir a:after,
+    a[href^="javascript:"]:after,
+    a[href^="#"]:after {
+        content: "";
+    }
+
+    pre,
+    blockquote {
+        border: 1px solid #999;
+        page-break-inside: avoid;
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tr,
+    img {
+        page-break-inside: avoid;
+    }
+
+    img {
+        max-width: 100% !important;
+    }
+
+    @page {
+        margin: 0.5cm;
+    }
+
+    p,
+    h2,
+    h3 {
+        orphans: 3;
+        widows: 3;
+    }
+
+    h2,
+    h3 {
+        page-break-after: avoid;
+    }
+}

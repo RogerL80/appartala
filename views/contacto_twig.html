@@ -1,0 +1,105 @@
+{% extends 'default_layout.html'%}
+
+{% block javascript %}
+
+{% endblock %}
+
+{% block navbarselect %}
+<li><a href="./index.php">Inicio</a></li>
+<li><a href="./perfil.php">Perfil</a></li>
+<li><a href="./selCancha.php">Reservar</a></li>
+<li class="active"><a>Contáctanos</a></li>
+{% endblock %}
+
+{% block contenidos %}
+<div class="col-md-8">
+	<h2 class="lead"><strong>Contáctanos</strong></h2>
+	<hr/>
+	<form id="formcontacto" action="contactar.php" method="post" class="form-horizontal">
+		<div class="form-group">
+			<label for="" class="control-label col-sm-2">Nombre</label>
+			<div class="col-sm-6">
+				<input type="text" class="form-control" name="nombre" id="nombre" placeholder="Introduce Nombre">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="" class="control-label col-sm-2">Email</label>
+			<div class="col-sm-6">
+				<input type="email" class="form-control" name="email" id="email" placeholder="example@server.com" pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="" class="control-label col-sm-2">Asunto</label>
+			<div class="col-sm-6">
+				<input type="text" class="form-control" name="asunto" id="asunto" placeholder="Introduce Asunto">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="" class="control-label col-sm-2">Comentario</label>
+			<div class="col-sm-6">
+				<textarea class="form-control" name="mensaje" id="mensaje" rows="5" placeholder="Introduce tu comentario..."></textarea>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="" class="control-label col-sm-2"></label>
+			<div class="col-sm-6">
+				<button type="submit" class="btn btn-success">Enviar</button>
+			</div>
+		</div>
+	</form>
+</div>
+<div class="col-md-4">
+	<h2 class="lead"><strong>Preguntas Frecuentes</strong></h2>
+	<hr/>
+	<dl>
+		<dt>Que es Appartala?</dt>
+		<dd>El sitio en Internet para reservar y administrar canchas sinteticas en linea.</dd><br/>
+		<dt>Registrar un negocio tiene algun costo?</dt>
+		<dd>Crea tu negocio completamente gratis, los costos del servicio se darán en la medida que registres horas reservadas en tu(s) cancha(s). Quiere decir que si tu ganas appartala tambien recibirá una comisión por el servicio</dd><br/>
+		<dt>Como reservo una cancha?</dt>
+		<dd>Entra en el negocio que quieras jugar a traves de nuestro <a href="./ubicacion.php">mapa</a> o en nuestro <a href="./selCancha.php">buscador</a> y selecciona la cancha, el horario y listo. Debes estar registrado para hacer una reserva</dd><br/>
+	</dl>
+</div>
+<!-- Modal BIENVENIDA-->
+<div class="modal fade" id="cargando" tabindex="-1" role="dialog" aria-labelledby="myModalLoad">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+    	<div class="col-sm-4 col-sm-offset-4">
+			<img src="./img/loader.gif" alt="" id="imagen">
+    	</div>
+    </div>
+  </div>
+</div>
+<!--  FIN MODAL ELIMINAR-->
+{% endblock %}
+{% block scripts %}
+<script>
+	$(function(){
+	$("#formcontacto").on("submit", function(e){
+		e.preventDefault();
+		var formData = new FormData(document.getElementById("formcontacto"));
+		$.ajax({
+			url: "./contactar.php",
+			type: "post",
+			dataType: "html",
+			data: formData,
+			cache: false,
+			contentType: false,
+			processData: false,
+			beforeSend: function(){
+				$('#cargando').modal('show');
+			}
+        })
+        .done(function(res){
+        	$('#cargando').modal('hide');
+        	if(res == 0){ 
+        		document.getElementById("formcontacto").reset();
+        		alert("Mensaje enviado.");
+        	}else{
+        		alert("Error al enviar el mensaje. Intentelo de nuevo");
+        	}
+        });
+	});
+})
+</script>
+{% endblock %}

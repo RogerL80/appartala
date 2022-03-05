@@ -1,0 +1,56 @@
+{% extends 'default_layout.html'%}
+
+{% block javascript %}
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js"></script>
+<script languaje="JavaScript" src="./includes/maps.js" type="text/javascript"></script>
+<script languaje="JavaScript" src="./includes/functions.js" type="text/javascript"></script>
+
+{% endblock %}
+{% block navbarselect %}
+<li><a href="./index.php">Inicio</a></li>
+<li><a href="./perfil.php">Perfil</a></li>
+<li class="active"><a>Reservar</a></li>
+<li><a href="./contacto.php">Contáctanos</a></li>
+{% endblock %}
+
+{% block contenidos %}
+<br/>
+
+<div class="container">
+  <form method="post" action="./consulta.php" id="fconsulta" class="form-inline">
+      <div class="form-group">
+        <label for="nombre1">Pais: </label>
+        <input type="text" class="form-control" id="nombre1" name="nombre1" form="formodi" required>
+      </div>
+      <div class="form-group">
+        <label for="jugadores1">Jugadores: </label>
+        <input type="number" class="form-control" id="jugadores1" name="jugadores1" min="3" max="11" form="formodi" placeholder="Max 11" required>
+      </div>
+      <div class="form-group">
+        <label for="largo1">Largo: </label>             
+        <div class="input-group">
+            <input type="number" class="form-control" id="largo1" name="largo1" min="3" max="120" form="formodi" placeholder="Maximo 120" required>
+            <div class="input-group-addon">mts</div>
+          </div>
+      </div>
+      <div class="form-group">
+        <label for="ancho1">Ancho: </label>         
+        <div class="input-group">
+            <input type="number" class="form-control" id="ancho1" name="ancho1" min="3" max="90" form="formodi" placeholder="Maximo 120" required>
+            <div class="input-group-addon">mts</div>
+          </div>
+      </div>
+      <div class="form-group">
+        <label for="superficie1">Superficie: </label>
+        <select class="form-control" id="superficie1" name="superficie1" form="formodi" required>
+        {% for sup in super %}
+          <option value="{{ sup.idSuperficie }}">{{ sup.descrip }}</option>
+        {% endfor %}
+        </select>
+      </div>
+      <input type="submit" id="boton1" class="btn btn-primary" value="Modificar" form="formodi">
+  </form>
+    
+</div>
+
+{% endblock %}

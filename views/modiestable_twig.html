@@ -1,0 +1,258 @@
+{% extends 'default_layout.html'%}
+
+{% block javascript %}
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXpWx6HmzzjteS0YkYuwrWwIaVo7N5g5k"></script>
+<script languaje="JavaScript" src="./includes/maps.js" type="text/javascript"></script>
+<script languaje="JavaScript" src="./includes/functions.js" type="text/javascript"></script>
+<script type="text/javascript" src="./bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="./bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.{{ len }}.js" charset="UTF-8"></script>
+<link rel="stylesheet" href="./bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css" />
+<script type="text/javascript">
+  google.maps.event.addDomListener(window, 'load', initialize);
+</script> 
+<script src='https://www.google.com/recaptcha/api.js'></script>
+{% endblock %}
+
+{% block navbarselect %}
+<li><a href="./index.php">Inicio</a></li>
+<li class="active"><a>Perfil</a></li>
+<li><a href="./selCancha.php">Reservar</a></li>
+<li><a href="./contacto.php">Contáctanos</a></li>
+{% endblock %}
+
+{% block contenidos %}
+<br/>
+<div class="row">
+{% for registro in estable %}
+	<div class="row">
+		<div class="col-xs-12 col-sm-3 col-md-3">
+{% if registro.foto %} 
+    {% set fot = registro.nombre %}
+{% else %}
+	{% set fot = '' %}
+{% endif %}
+	    	<output id="list" class="img-responsive"><img class="img-rounded img-responsive" src="{{ registro.foto }}" alt="{{ fot }}" >
+	    	</output>
+	    	<br>
+			<input type="hidden" id="tipoimg" name="tipoimg" form="formulario" class="form-control">
+			<input type="hidden" id="fotoant" name="fotoant" value='{{ registro.foto }}' form="formulario" class="form-control">
+			<div class="form-group form-group-sm">				
+				<div class="col-sm-9">
+					<input type="file" id="foto" name="foto" form="formulario" class="form-control" accept="image/jpg,image/jpeg,image/png,image/gif,image/bmp">
+				</div>
+			</div>
+			<output id="list" class="img-responsive"></output>
+			<input type="hidden" id="tipoimg" name="tipoimg">	
+		</div>
+		<div class="col-xs-12 col-sm-5 col-md-5">
+			<form id="formulario" method="post" enctype="multipart/form-data">
+				<div class="page-header">
+			    	<input type="text" class="form-control input-lg" name="nombre" id="nombre" size="60" required 
+						value='{{ registro.nombre }}' placeholder="Escriba el Nombre del Establecimiento">
+				</div>
+			    <div class="form-group">
+		    		<label for="email" class="col-md-3">
+		    			<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Email:</label>
+		    		<div class="col-md-9">
+				    	<input type="email" class="form-control" name="email" id="email" placeholder="example@server.com" value="{{ registro.email }}" pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}" required>
+				    	<div id="Infoem"></div>
+				    </div>
+			    </div>
+			    <div class="form-group">
+					<label for="usuario" class="col-md-3">
+					<span class="glyphicon glyphicon-user" aria-hidden="true"></span> Usuario:</label>
+					<div class="col-md-9">
+						<input type="text" form="formulario" class="form-control" name="usuario" id="usuario" size="20" autocomplete="off" title="Debe contener de 6 a 20 caracteres minus" pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{6,20}$" placeholder="para identificarte en appartala" value="{{ registro.iduser }}" required>
+						<div id="Info"></div>
+					</div>
+				</div>
+			    <div class="form-group">
+					<label for="nit" class="col-md-3">
+						<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> NIT:</label>
+					<div class="col-md-9">
+						<input type="text" class="form-control" id="nit" name="nit" size="20" value="{{ registro.nit }}" required>
+		            </div>
+	            </div>
+			    <div class="form-group">
+		    		<label for="pw" class="col-md-3">
+		    			<span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span> Passw:</label>
+		    		<div class="col-md-9">
+				    	<input type="password" class="form-control" name="pw" id="pw" value="{{ registro.pw }}" title="Password debe contener al menos 6 caracteres, incluyendo Mayus/Minus y numeros" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" required>
+				    </div>
+			    </div>
+			    <div class="form-group">
+		    		<label for="pw2" class="col-md-3">
+		    			<span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span> Confir Pw:</label>
+		    		<div class="col-md-9">
+				    	<input type="password" class="form-control" name="pw2" id="pw2" value="{{ registro.pw }}" title="Por favor entre el mismo Password anterior" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" onchange="this.setCustomValidity(this.validity.patternMismatch ? this.title : '');" required>
+				    </div>
+			    </div>
+			    <div class="form-group">
+		    		<label for="dir" class="col-md-3">
+		    			<span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Dir:</label>
+		    		<div class="col-md-9">
+				    	<input type="text" class="form-control" id="dir" name="dir" value="{{ registro.direccion }}" size="50" required>
+				    </div>
+			    </div>
+			    <div class="form-group">
+		    		<label for="tel" class="col-md-3">
+		    			<span class="glyphicon glyphicon-earphone" aria-hidden="true"></span> Telefono:</label>
+		    		<div class="col-md-9">
+				    	<input type="text" class="form-control" name="tel" id="tel" value="{{ registro.tel }}" required>
+				    </div>
+			    </div>
+				<div class="form-group">
+		    		<label for="city" class="col-md-3">
+		    			<span class="glyphicon glyphicon-globe" aria-hidden="true"></span> Ciudad:</label>
+		    		<div class="col-md-9">
+				    	<input type="text" class="form-control" id="city" name="city" value="{{ registro.ciudad }} - {{ registro.estado }}" required>
+				    </div>
+			    </div>
+			    <div class="form-group">
+					<label for="pais" class="col-md-3">
+						<span class="glyphicon glyphicon-globe" aria-hidden="true"></span> Pais*:</label>
+					<div class="col-md-9">
+						<input type="text" class="form-control" id="pais" name="pais" value="{{ registro.nombrepais }}" readonly required form="formulario">
+					</div>
+				</div>   
+			    <div class="form-group">
+					<label for="fechamax" class="col-md-3">
+						<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> Hasta:</label>
+					<div class="col-md-9">
+						<input type="text" id="fechamax" name="fechamax" class="form-control" min="2016-07-31" form="formulario" value="{{ registro.fechafin }}">
+					</div>
+				</div>
+	            <div class="form-group">
+					<label for="descripcion" class="col-md-3">
+						<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Descrip:</label>
+					<div class="col-md-9">
+						<textarea name="descripcion" class="form-control" id="descripcion" cols="40" rows="5" form="formulario">{{ registro.descripcion }}</textarea>
+					</div>
+				</div>
+				<div class="col-md-12 col-md-offset-3">
+	            <!-- Start Responsive reCAPTCHA -->
+				<div class="g-recaptcha" data-sitekey="{{ publickey }}"></div>
+				<!-- End Responsive reCAPTCHA-->
+				</div>
+			    <input type="hidden" id="codpais" name="codpais" required value="{{ registro.isopais }}">
+	            <input type="hidden" id="ciudad" name="ciudad" required value="{{ registro.ciudad }}">
+	            <input type="hidden" id="estado" name="estado" required value="{{ registro.estado }}">
+	            <input type="hidden" id="lat" name="lat" value="{{ registro.lat }}" required>
+	            <input type="hidden" id="lng" name="lng" value="{{ registro.lng }}" required>
+	            <input type="hidden" id="activo" name="activo" value="{{ registro.activo }}" required>
+	            <input type="hidden" id="idest" name="idest" value="{{ em }}">
+	            <div id="alerta" class="col-md-9">
+					<img src="./img/loader.gif" alt="" id="imagen"><span id="mensajes"></span>
+				</div>
+				<div class="col-md-3">
+					<input type="submit" id="boton" class="btn btn-primary" value="Modificar" form="formulario">
+				</div>
+			</form>				
+		</div>
+		<div class="col-xs-12 col-sm-4 col-md-4">
+			<h3>Localización en el mapa</h3>
+			<div class="map-container">
+				<div id="map-canvas">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<br/>
+{% endfor %}
+{% endblock %}
+{% block scripts %}
+<script>
+document.getElementById('foto').addEventListener('change', archivo, false);
+$('#fechamax').datepicker({
+        //title: "Selecciona la Fecha",
+        startDate: "now",
+        //endDate: '{{ fecha_fin }}',
+        language: '{{ len }}',
+        weekStart: 1,
+        format: "yyyy-mm-dd",
+        orientation: "top auto"
+    });
+//-----VALIDACION DE FORMULARIO  
+
+$(function(){
+  $("#formulario").on("submit", function(e){
+    e.preventDefault();
+    var captcha = $('#g-recaptcha-response').val();
+      //alert('Estamos en checkForm :'+captcha);
+      if(captcha != "") {
+
+      	//VALIDACION
+      	var email = $('#email').val();
+      	var usuario = $('#usuario').val();
+      	var idest = $('#idest').val();
+      	$.ajax({
+      		type:"post",
+      		url: "./verificaremail.php",
+      		data: ('usuario='+usuario+'&email='+email+'&idest='+idest),
+      		beforeSend: function(){
+	          $('#imagen').show();
+	          $('#imagen').attr("src","./img/loader.gif");
+	          $("#mensajes").html(" Procesando datos...");
+	        },
+      		success: function(respuesta){
+      			if(respuesta==0){
+					var men = '<div class="peligro">Email ya existe. Regresa e intentalo de nuevo.</div>';
+					$('#Info').fadeIn(1000).html('');
+					$('#Infoem').fadeIn(1000).html('<div class="advertencia">Email ya existente. Ingresa uno nuevo</div>');
+					$('#email').focus();
+					$('#imagen').attr("src","./img/warning.png");
+					$('#imagen').show();
+					$("#mensajes").html(men);
+      			}
+      			if(respuesta==1){
+					var men = '<div class="peligro">Nombre de Usuario ya existe. Regresa e intentalo de nuevo.</div>';
+					$('#Infoem').fadeIn(1000).html('');
+					$('#Info').fadeIn(1000).html('<div class="advertencia">Usuario ya existente</div>');
+					$('#imagen').attr("src","./img/warning.png");
+					$('#imagen').show();
+					$('#usuario').focus();
+					$("#mensajes").html(men);
+      			}
+      			if(respuesta==2){
+					var f = $(this);
+					var formData = new FormData(document.getElementById("formulario"));
+					$.ajax({
+						type: "post",
+						url: "./modificar.php",
+						data: formData,
+						cache: false,
+						contentType: false,
+						processData: false,
+					})
+					.done(function(res){
+						//alert("res: "+res);
+						if(res == 4){
+							var men = '<div class="exitoso">Usuario Actualizado correctamente</div>';
+							$('#Infoem').fadeIn(1000).html('');
+							$('#Info').fadeIn(1000).html('');
+							$('#imagen').attr("src","./img/tick.png");
+							$('#imagen').show();
+							$("#mensajes").html(men);
+						}
+						if(res == 3){
+						  men = '<div class="peligro">Debes llenar todos los campos para registar el usuario</div>';
+						  $('#Infoem').fadeIn(1000).html('');
+						  $('#Info').fadeIn(1000).html('');
+						  $('#imagen').attr("src","./img/warning.png");
+						  $('#imagen').show();
+						  $("#mensajes").html(men);
+						}	        
+					});
+      			}
+      		}
+      	});
+      }else {
+			$('#imagen').attr("src","./img/warning.png");
+			$('#imagen').show();
+			$("#mensajes").html('<div class="advertencia">Debes dar clic en "No soy un robot". Para avanzar.</div>');
+      }
+  });
+})
+</script>
+{% endblock %}

@@ -1,0 +1,200 @@
+{% extends 'default_layout.html'%}
+
+{% block javascript %}
+<script languaje="JavaScript" src="./includes/functions.js" type="text/javascript"></script>
+<script type="text/javascript" src="./bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="./bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.{{ len }}.js" charset="UTF-8"></script>
+<link rel="stylesheet" href="./bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css"/>
+<script src='https://www.google.com/recaptcha/api.js'></script>
+
+{% endblock %}
+
+{% block navbarselect %}
+<li><a href="./index.php">Inicio</a></li>
+<li><a href="./perfil.php">Perfil</a></li>
+<li><a href="./selCancha.php">Reservar</a></li>
+<li><a href="./contacto.php">Contáctanos</a></li>
+{% endblock %}
+
+{% block contenidos %}
+<form method="post" id="fregistrar" enctype="multipart/form-data">
+<div class="col-md-3 col-xs-12">
+	<legend>Foto de Perfil</legend>
+	<output id="list" class="img-responsive">
+		<img class="img-thumbnail img-responsive" src="img/user.png" title=""/>
+	</output>
+	<div class="form-group">
+		<label for="foto">Foto de perfil:</label>
+		<input type="file" form="fregistrar" id="foto" name="foto" class="form-control" value"img/user.png" accept="image/jpg,image/jpeg,image/png,image/gif,image/bmp">
+	</div>
+</div>
+<div class="col-md-7 col-xs-12">
+		<legend>Datos Importantes</legend>
+		<div class="form-group">
+		  <label for="email">E-mail *:</label>
+		  <input type="email" form="fregistrar" class="form-control" id="email" name="email" placeholder="example@server.com" autocomplete="off" pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}" required>
+		  <div id="Infoem"></div>
+		</div>
+		<div class="form-group">
+		  <label for="pw">Password *:</label>
+		  <input type="password" form="fregistrar" class="form-control" name="pw" title="Password debe contener al menos 6 caracteres, incluyendo Mayus/Minus y numeros" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" required >
+		</div>
+		<div class="form-group">
+		  <label for="pw2">Re-escribir Password*:</label>
+		  <input type="password" form="fregistrar" class="form-control" name="pw2" title="Por favor entre el mismo Password anterior" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" onchange="this.setCustomValidity(this.validity.patternMismatch ? this.title : '');" required >
+		</div>
+		<div class="form-group">
+		  <label for="usuario">Usuario :</label>
+		  <input type="text" form="fregistrar" class="form-control" name="usuario" id="usuario" size="20" autocomplete="off" title="Debe contener de 6 a 20 caracteres minus" pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{6,20}$" placeholder="para identificarte en appartala" required>
+		  <div id="Info"></div>
+		</div>
+		<div class="form-group">
+		  <label for="nombres">Nombres :</label>
+		  <input type="text" form="fregistrar" class="form-control" name="nombres" size="60" required>
+		</div>
+		<div class="form-group">
+		  <label for="apellidos">Apellidos :</label>
+		  <input type="text" form="fregistrar" class="form-control" id="apellidos" name="apellidos" size="60" required>
+		</div>
+		<div class="form-group">
+		  <label for="nacimiento">Fecha Nacimiento:</label>
+		  <input type="text" form="fregistrar" id="nacimiento" name="nacimiento" class="form-control" placeholder="AAAA-MM-DD" autocomplete="off" required>
+		</div>
+		<div class="form-group">
+		  <label for="tel">Telefono:</label>
+		  <input type="tel" form="fregistrar" class="form-control" id="tel" name="tel" placeholder="Para contactarte..." required>
+		</div>
+		<input type="hidden" id="creado" name="creado">
+		<!-- Start Responsive reCAPTCHA -->
+		<div class="g-recaptcha" data-sitekey="{{ publickey }}"></div>
+		<!-- End Responsive reCAPTCHA-->
+		<input type="submit" form="fregistrar" id="boton" class="btn btn-primary" value="Registrar">
+		<input type="reset" form="fregistrar" class="btn btn-primary" value="Restablecer">
+		<div id="alerta"><img src="./img/loader.gif" alt="" id="imagen"><span id="mensajes"></span></div>
+	</form>	
+</div>
+<!-- Modal BIENVENIDA-->
+<div class="modal fade" id="bienvenida" tabindex="-1" role="dialog" aria-labelledby="myModalWell">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <h4 class="modal-title" id="myModalWell">Bienvenido a Appartala</h4>
+    </div>
+    <div class="modal-body">
+      <h1>Hola <span id="nomcliente"></span>!</h1> 
+        <p> 
+        <b>Bienvenido a Appartala</b>; el sistema en linea para encontrar y reservar de manera sencilla las canchas de futbol que quieras.<br/>
+        inicia sesion y comienza a configurar tu perfil.<br/>
+        Te recomendamos:<br/>
+          <ul>
+          1. Encuentra la cancha mas cercana en nuestro <a href="./ubicacion.php">mapa de localizacion, </a>dale clic al nombre del Establecimiento y Aparta tu cancha<br/>
+          2. Si no sabes llegar a las canchas, puedes dar clic en <span class="label label-pill label-success">Como llegar</span>, y si tienes la app de <img src="img/logo-waze.png" class="img-responsive"> da clic y el GPS te llevará<br/>
+          3. Debes iniciar sesión para poder reservar.<br/>
+          4. Si deseas cancelar una reserva ten en cuenta que no podrás realizar otra hasta que pasen los dias de penalidad.<br/>
+          </ul>
+          <br/>
+          Appartala.... la que tu quieras.
+        </p> 
+    </div>
+    <br/>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+    </div>
+    </div>
+  </div>
+</div>
+<!--  FIN MODAL ELIMINAR-->
+{% endblock %}
+{% block scripts %}
+<script>
+document.getElementById('foto').addEventListener('change', archivo, false);
+window.onload = function() {
+    $('#nacimiento').datepicker({
+        //title: "Selecciona la Fecha",
+        startDate: '-70y',
+        endDate: '-10y',
+        language: '{{ len }}',
+        weekStart: 1,
+        format: "yyyy-mm-dd",
+        orientation: "top auto"
+    });
+    a = new Date();
+    fecha = a.getFullYear()+"-"+(a.getMonth()+1)+"-"+a.getDate();
+    document.getElementById("creado").value = fecha;
+  };
+//-----VALIDACION DE FORMULARIO  
+
+$(function(){
+	$("#fregistrar").on("submit", function(e){
+		e.preventDefault();
+		var captcha = $('#g-recaptcha-response').val();
+	    //alert('Estamos en checkForm :'+captcha);
+	    if(captcha != "") {
+			var f = $(this);
+			var formData = new FormData(document.getElementById("fregistrar"));
+			$.ajax({
+				url: "./insertarcliente.php",
+				type: "post",
+				dataType: "html",
+				data: formData,
+				cache: false,
+				contentType: false,
+				processData: false,
+				beforeSend: function(){
+					$('#imagen').show();
+					$('#imagen').attr("src","./img/loader.gif");
+					$("#mensajes").html(" Procesando datos...");
+				}
+	        })
+	        .done(function(res){
+	        	if(res == 0){ 
+	        		var men = '<div class="peligro">Nombre de Usuario ya existe. Regresa e intentalo de nuevo.</div>';
+	        		$('#Infoem').fadeIn(1000).html('');
+	        		$('#Info').fadeIn(1000).html('<div class="advertencia">Usuario ya existente</div>');
+	        		$('#imagen').attr("src","./img/warning.png");
+	        		$('#imagen').show();
+	        		$('#usuario').focus();
+	        	}
+	        	if(res == 1){
+					var men = '<div class="exitoso">Usuario registrado correctamente</div>';
+					$('#Infoem').fadeIn(1000).html('');
+	        		$('#Info').fadeIn(1000).html('');
+	        		$('#imagen').attr("src","./img/tick.png");
+	        		$('#imagen').show();
+	        		$('#bienvenida').modal('show');
+				}
+	        	if(res == 2){
+	        		var men = '<div class="advertencia">Usuario registrado pero no se pudo enviar correo</div>';
+	        		$('#Infoem').fadeIn(1000).html('');
+	        		$('#Info').fadeIn(1000).html('');
+	        		$('#imagen').attr("src","./img/tick.png");
+	        		$('#imagen').show();
+	        		$('#bienvenida').modal('show');
+	        	}
+	        	if(res == 3){
+	        		men = '<div class="peligro">Debes llenar todos los campos para registar el usuario</div>';
+	        		$('#Infoem').fadeIn(1000).html('');
+	        		$('#Info').fadeIn(1000).html('');
+	        		$('#imagen').attr("src","./img/warning.png");
+	        		$('#imagen').show();
+	        	}
+	        	if(res == 4){ 
+	        		var men = '<div class="peligro">Email ya existe. Regresa e intentalo de nuevo.</div>';
+	        		$('#Info').fadeIn(1000).html('');
+	        		$('#Infoem').fadeIn(1000).html('<div class="advertencia">Email ya existente. Ingresa uno nuevo</div>');
+	        		$('#email').focus();
+	        		$('#imagen').attr("src","./img/warning.png");
+	        		$('#imagen').show();
+	        	}
+	        	$("#mensajes").html(men);
+	        });
+	    } else {
+	    	$('#imagen').attr("src","./img/warning.png");
+	    	$('#imagen').show();
+	        $("#mensajes").html('<div class="advertencia">Debes dar clic en "No soy un robot". Para avanzar.</div>');
+	    }
+	});
+})
+</script>
+{% endblock %}

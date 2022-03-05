@@ -1,0 +1,89 @@
+{% extends 'default_layout.html'%}
+
+{% block javascript %}
+<script languaje="JavaScript" src="./includes/functions.js" type="text/javascript"></script>
+<script type="text/javascript" src="./bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="./bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.{{ len }}.js" charset="UTF-8"></script>
+<link rel="stylesheet" href="./bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css"/>
+<script src='https://www.google.com/recaptcha/api.js'></script>
+{% endblock %}
+
+{% block navbarselect %}
+<li><a href="./index.php">Inicio</a></li>
+<li><a href="./perfil.php">Perfil</a></li>
+<li><a href="./selCancha.php">Reservar</a></li>
+<li><a href="./contacto.php">Contáctanos</a></li>
+{% endblock %}
+
+{% block contenidos %}
+<form action="./modificarcl.php" method="post" id="fregistrar" enctype="multipart/form-data" onsubmit="return checkCaptcha(this);">
+<div class="col-md-3 col-xs-12">
+{% for client in cliente %}
+	<legend>Foto de Perfil</legend>
+	<output id="list" class="img-responsive">
+		<img class="img-thumbnail img-responsive" src="{{ client.fotoc }}" title=""/>
+	</output>
+	<div class="form-group">
+		<label for="foto">Foto de perfil:</label>
+		<input type="file" form="fregistrar" id="foto" name="foto" class="form-control" accept="image/jpg,image/jpeg,image/png,image/gif,image/bmp">
+	</div>
+</div>
+<div class="col-md-7 col-xs-12">
+		<legend>Datos Importantes</legend>
+		<div class="form-group">
+		  <label for="email">E-mail :</label>
+		  <input type="email" form="fregistrar" class="form-control" name="email" placeholder="example@server.com" value="{{ client.email }}" pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}" required>
+		  <input type="hidden" form="fregistrar" name="idcli" value="{{ client.idCliente }}" required>
+		  <input type="hidden" id="fotoant" name="fotoant" value='{{ client.fotoc }}' form="fregistrar">
+		</div>
+		<div class="form-group">
+		  <label for="pw">Password :</label>
+		  <input type="password" form="fregistrar" class="form-control" name="pw" value="{{ client.pw }}" title="Password debe contener al menos 6 caracteres, incluyendo Mayus/Minus y numeros" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" required >
+		</div>
+		<div class="form-group">
+		  <label for="pw2">Re-escribir Password :</label>
+		  <input type="password" form="fregistrar" class="form-control" name="pw2" value="{{ client.pw }}" title="Por favor entre el mismo Password anterior" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" onchange="this.setCustomValidity(this.validity.patternMismatch ? this.title : '');" required >
+		</div>
+		<div class="form-group">
+		  <label for="usuario">Usuario :</label>
+		  <input type="text" form="fregistrar" class="form-control" name="usuario" size="20" title="Debe contener de 6 a 20 caracteres" pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{6,20}$" value="{{ client.idUsuario }}" required>
+		</div>
+		<div class="form-group">
+		  <label for="nombres">Nombres :</label>
+		  <input type="text" form="fregistrar" class="form-control" name="nombres" size="60" value="{{ client.nombres }}" required>
+		</div>
+		<div class="form-group">
+		  <label for="apellidos">Apellidos :</label>
+		  <input type="text" form="fregistrar" class="form-control" id="apellidos" name="apellidos" size="60" value="{{ client.apellidos }}" required>
+		</div>
+		<div class="form-group">
+		  <label for="nacimiento">Fecha Nacimiento:</label>
+		  <input type="text" form="fregistrar" id="nacimiento" name="nacimiento" class="form-control" value="{{ client.fechaNac }}">
+		</div>
+		<div class="form-group">
+		  <label for="tel">Telefono:</label>
+		  <input type="tel" form="fregistrar" class="form-control" id="tel" name="tel" value="{{ client.telefono }}" required>
+		</div>
+		<!-- Start Responsive reCAPTCHA -->
+		<div class="g-recaptcha" data-sitekey="{{ publickey }}"></div>
+		<!-- End Responsive reCAPTCHA-->
+		<input type="submit" form="fregistrar" id="boton" class="btn btn-primary" value="Modificar">
+		
+{% endfor %}
+</div>
+</form>	
+{% endblock %}
+{% block scripts %}
+<script>
+$('#nacimiento').datepicker({
+        //title: "Selecciona la Fecha",
+        //startDate: "now",
+        endDate: "-10y",
+        language: '{{ len }}',
+        weekStart: 1,
+        format: "yyyy-mm-dd",
+        orientation: "top auto"
+    }); 
+document.getElementById('foto').addEventListener('change', archivo, false);
+</script>
+{% endblock %}

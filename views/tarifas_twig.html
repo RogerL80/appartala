@@ -1,0 +1,352 @@
+{% extends 'default_layout.html'%}
+
+{% block javascript %}
+<script src="./js/accounting.js"></script>
+<script languaje="JavaScript" src="./includes/functions.js" type="text/javascript"></script>
+<script type="text/javascript" src="./bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="./bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.{{ len }}.js" charset="UTF-8"></script>
+<link rel="stylesheet" href="./bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css" />
+<style>
+  td {padding:5px;border:solid #ddd;border-width:0 0 1px;}
+  .editable span{display:block;}
+  .editable span:hover {background:url(./img/edit.png) 100% 50% no-repeat;cursor:pointer}
+  .copiable span{display:block;}
+  .copiable span:hover {background:url(./img/edit.png) 100% 50% no-repeat;cursor:pointer}
+    
+  td input{height:24px;width:100px;border:1px solid #ddd;padding:0 5px;margin:0;border-radius:6px;vertical-align:middle}
+  a.enlace{display:inline-block;width:24px;height:24px;margin:0 0 0 5px;overflow:hidden;text-indent:-999em;vertical-align:middle}
+  .guardar{background:url(./img/save.png) 0 0 no-repeat}
+  .cancelar{background:url(./img/cancel.png) 0 0 no-repeat}
+  .cancelar2{background:url(./img/cancel.png) 0 0 no-repeat}
+  .copiar{background:url(./img/Copy.png) 0 0 no-repeat}
+  .mensaje{display:block;text-align:center;margin:0 0 20px 0}
+  .ok{display:block;padding:10px;text-align:center;background:green;color:#fff}
+  .ko{display:block;padding:10px;text-align:center;background:red;color:#fff}
+</style>
+
+{% endblock %}
+
+{% block navbarselect %}
+<li><a href="./index.php">Inicio</a></li>
+<li class="active"><a>Perfil</a></li>
+<li><a href="./selCancha.php">Reservar</a></li>
+<li><a href="./contacto.php">Contacto</a></li>
+{% endblock %}
+
+{% block contenidos %}
+<div class="container">
+   <br/>
+    <div class="row">
+      <div class="col-md-1 col-xs-3">
+        <img class="img-rounded img-responsive" src="{{ fotoesta }}" alt="{{ nombre_establ }}">
+      </div>
+  {% for registro in nc  %}
+      <div class="col-md-5 col-xs-9">
+        <h3><b>Tarifas - {{ registro.nombreCancha }}</b></h3>
+      </div>
+{% endfor %}
+    </div>
+    <div class="row">
+    <div class="col-md-3">
+      <h3 class="text-center"><b>General</b></h3>
+      <div class="table-responsive">            
+        <table class="table table-bordered table-condensed lineas" id="general">
+          <thead>
+          <tr class="row small verde">
+             <th class="col text-center col-sm-3">Hr</th>
+             <td class="col text-center col-sm-9">Valor</td>
+          </tr>
+          </thead>
+          <tbody>
+{% for i in hora_ini..hora_fin %}
+          <tr class="row small text-center">
+{% if i < 12 %}
+            <th class="col verde text-center">{{ i }} am</th>
+{% elseif i == 12 %}
+            <th class="col verde text-center">{{ i }} pm</th>                     
+{% else %}
+            <th class="col verde text-center">{{ i - 12 }} pm</th> 
+{% endif %}
+            <td class="col copiable" id="{{ i }}"></td>
+          </tr>
+{% endfor %}
+          </tbody>
+        </table>   
+      </div>
+    </div>
+    <div class="col-md-9">
+    <h3 class="text-center"><b>Detallado</b></h3>
+        <div class="table-responsive">            
+            <table class="table table-bordered table-condensed lineas" id="especifica">
+              <thead>
+              <tr class="row small verde">
+                 <th class="col text-center">Hr</th>
+                 <th class="col text-center" id="t1">L</th>
+                 <th class="col text-center" id="t2">M</th>
+                 <th class="col text-center" id="t3">Mi</th>
+                 <th class="col text-center" id="t4">Ju</th>
+                 <th class="col text-center" id="t5">Vi</th>
+                 <th class="col text-center" id="t6">Sa</th>
+                 <th class="col text-center" id="t0">Do</th>
+                 <th class="col text-center">Hr</th>
+              </tr>
+              </thead>
+              <tbody>
+{% for i in hora_ini..hora_fin %}
+              <tr class="row small text-center" id="{{ i }}">
+{% if i < 12 %}
+                <th class="col verde text-center">{{ i }} am</th>
+{% elseif i == 12 %}
+                <th class="col verde text-center">{{ i }} pm</th>                     
+{% else %}
+                <th class="col verde text-center">{{ i - 12 }} pm</th> 
+{% endif %}
+                <td class="col dias text-center editable" id="1-{{ i }}"></td>
+                <td class="col dias text-center editable" id="2-{{ i }}"></td>
+                <td class="col dias text-center editable" id="3-{{ i }}"></td>
+                <td class="col dias text-center editable" id="4-{{ i }}"></td>
+                <td class="col dias text-center editable" id="5-{{ i }}"></td>
+                <td class="col dias text-center editable" id="6-{{ i }}"></td>
+                <td class="col dias text-center editable" id="0-{{ i }}"></td>
+{% if i < 12 %}
+                <th class="col verde text-center">{{ i }} am</th>
+{% elseif i == 12 %}
+                <th class="col verde text-center">{{ i }} pm</th>                     
+{% else %}
+                <th class="col verde text-center">{{ i - 12 }} pm</th> 
+{% endif %}
+              </tr>
+{% endfor %}
+              </tbody>
+            </table>   
+        </div> 
+    </div>
+    </div>
+    <div class="row">
+      <form method="post" id="modtarifas">
+          <input type="hidden" class="form-control" form="modtarifas" id="idcan" name="idcan" value="{{ cancha }}" required>
+          <input type="hidden" class="form-control" form="modtarifas" id="horaini" name="horaini" value="{{ hora_ini }}" required>
+          <input type="hidden" class="form-control" form="modtarifas" id="horafin" name="horafin" value="{{ hora_fin }}" required>
+          <div id="campos"></div>
+          <center>
+          <input type="submit" form="modtarifas" id="modif" class="btn btn-success" value="Modificar">
+          </center>       
+      </form>
+    </div>
+</div>
+<!-- Modal MENSAJE-->
+  <div class="modal fade bs-example-modal-sm" id="Modalmensaje" tabindex="-1" role="dialog" aria-labelledby="myModalMsj">
+    <div class="modal-dialog modal-sm" role="document">
+      <center>
+      <div id="mensaje"></div>
+      </center>
+    </div>
+  </div>
+  <!--  FIN MODAL-->
+<span id="temp" style="display: none;"></span>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  window.onload = function() {
+    arrayDias = new Array();
+    motari($.fn.datepicker.dates['{{ len }}']);
+    /* OBTENEMOS arrayDias */
+    $.ajax({
+      type: "POST",
+      data: "neg={{em}}",
+      url: "server/llenahorario.php"
+    })
+    .done(function(json) {
+      json = $.parseJSON(json)
+      for(var i=0;i<json.length;i++)
+      {
+        arrayDias[json[i].idDia]={
+          horaIni: json[i].horaIni,
+          horaFin: json[i].horaFin
+        };
+      }
+      bloqueodias(arrayDias);
+    });
+    /*FIN LLAMADA AJAX*/
+    /* OBTENEMOS Tarifas */
+    $.ajax({
+      type: "POST",
+      data: "can={{cancha}}",
+      url: "server/taricancha.php"
+    })
+    .done(function(json) {
+      json = $.parseJSON(json)
+      for(var i=0;i<json.length;i++)
+      {
+        var idjson = json[i].idDia+"-"+json[i].hora;
+        if($("#"+idjson).hasClass('normal'))
+        {
+          $("#"+idjson).html("<span>"+accounting.formatNumber(json[i].valor)+"</span>");
+          $("input[id="+idjson+"]").val(accounting.formatNumber(json[i].valor));
+        }
+      }
+      for(var i={{hora_ini}};i<={{hora_fin}};i++)
+      {
+        $("#"+i+".copiable").html("<span>0</span>");
+      }
+    });
+    /*FIN LLAMADA AJAX*/
+  }
+
+  $(document).ready(function() 
+  {
+    var td,campo,valor,id;
+    $(document).on("click","#especifica td.editable span",function(e)
+    {
+      e.preventDefault();
+      $("#especifica td").removeClass("editable");
+      $("#general td").removeClass("copiable");
+      td=$(this).closest("td");
+      valor=accounting.unformat($(this).text());
+      id=$(this).closest("tr").find(".id").text();
+      td.text("").html("<input type='number' id='editando' value='"+valor+"'><a class='enlace guardar' href='#'>Guardar</a><a class='enlace cancelar' href='#'>Cancelar</a>");
+      $('#editando').focus();
+    });
+    
+    $(document).on("click","#general td.copiable span",function(e)
+    {
+      e.preventDefault();
+      $("#general td").removeClass("copiable");
+      $("#especifica td").removeClass("editable");
+      td=$(this).closest("td");
+      valor=accounting.unformat($(this).text());
+      id=$(this).closest("tr").find(".id").text();
+      td.text("").html("<input type='number' id='editando' value='"+valor+"'><a class='enlace copiar' href='#'>Copiar</a><a class='enlace cancelar2' href='#'>Cancelar</a>");
+      $('#editando').focus();
+    });
+
+    $(document).on("click",".cancelar",function(e)
+    {
+      e.preventDefault();
+      td.html("<span>"+accounting.formatNumber(valor)+"</span>");
+      $("#especifica td:not(.id)").addClass("editable");
+      $("#general td:not(.id)").addClass("copiable");
+    });
+    
+    $(document).on("click",".cancelar2",function(e)
+    {
+      e.preventDefault();
+      td.html("<span>"+accounting.formatNumber(valor)+"</span>");
+      $("#general td:not(.id)").addClass("copiable");
+      $("#especifica td:not(.id)").addClass("editable");
+    });
+    
+    $(document).on("click",".guardar",function(e)
+    {
+      $("#mensaje").fadeIn(1000).html("<img src='./img/cargando.gif'>");
+      $("#Modalmensaje").modal('show');
+      e.preventDefault();
+      var x = $('#especifica td:not(.fpasada)');
+      long= x.length;
+      var resp = true;
+      for (var i = 0; i < long; i++)
+      {
+        if(!x[i].textContent){
+          resp = false;
+          alert("No se puede guardar hasta que esten llenas todas las Tarifas");
+          $("#Modalmensaje").modal('hide');
+          break;
+        }
+      }
+      if(resp){
+        idcanc = $('#idcan').val();
+        ide= $(this).closest("td").attr("id");
+        id= ide.split('-')
+        dia= id[0];
+        hora= id[1];
+        nuevovalor=$(this).closest("td").find("input").val();
+        if(nuevovalor>0){
+          $.ajax({
+            type: "POST",
+            url: "./editinplace.php",
+            data: { idcan: idcanc, idDia: dia, hora: hora, valor: nuevovalor, longitud: long }
+          })
+          .done(function( msg ) {
+            if(msg == 1){
+              $("#Modalmensaje").modal('hide');
+              $("#mensaje").fadeOut(3000).html("<h3>Tarifa Modificada</h3>");
+              td.html("<span>"+accounting.formatNumber(nuevovalor)+"</span>");
+              $("#especifica td:not(.id)").addClass("editable");
+              $("#general td:not(.id)").addClass("copiable");
+              $("input[id="+ide+"]").val(nuevovalor);
+              //setTimeout(function() {$('.ok,.ko').fadeOut('fast');}, 3000);
+            }else{
+              $("input[id="+ide+"]").val(nuevovalor);
+              var formData = new FormData(document.getElementById("modtarifas"));
+              $.ajax({
+                type: "POST",
+                url: "./moditarifa.php",
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false
+              })
+              .done(function( resp ) {
+                $("#Modalmensaje").modal('hide');
+                $("#mensaje").fadeOut(3000).html("<h3>Tarifa Modificada</h3>");
+                td.html("<span>"+accounting.formatNumber(nuevovalor)+"</span>");
+                $("#especifica td:not(.id)").addClass("editable");
+                $("#general td:not(.id)").addClass("copiable");
+              });
+            }
+          });
+        }
+      }
+    });
+
+    $(document).on("click",".copiar",function(e)
+    {
+      e.preventDefault();
+      hora = $(this).closest("td").attr("id");
+      nuevovalor=$(this).closest("td").find("input").val();
+      if(nuevovalor>0){
+        for (var i = 0; i < 7; i++) {
+          var ide = i+"-"+hora;
+          if(!$("#"+i+"-"+hora).hasClass('fpasada')){
+            $("#"+i+"-"+hora).html("<span>"+accounting.formatNumber(nuevovalor)+"</span>");
+            $("input[id="+ide+"]").val(nuevovalor);
+          }
+        };
+        td.html("<span>"+accounting.formatNumber(nuevovalor)+"</span>");
+        $("#general td:not(.id)").addClass("copiable");
+        $("#especifica td:not(.id)").addClass("editable");
+      };
+    });
+
+    $("#modtarifas").on("submit",function(e) {
+      e.preventDefault();
+      inputs = $("#modtarifas :input[class='validos']");
+      long= inputs.length;
+      var resp = true;
+      for (var i = 0; i < long; i++)
+      {
+        if(!inputs[i].value){
+          resp = false;
+          alert("Debe llenar todas las Tarifas");
+          break;
+        }
+      }
+      if(resp){
+        var formData = new FormData(document.getElementById("modtarifas"));
+        $.ajax({
+          type: "POST",
+          url: "./moditarifa.php",
+          data: formData,
+          cache: false,
+          contentType: false,
+          processData: false
+        })
+        .done(function( msg ) {
+          alert("tarifas guardadas");
+        });
+      }
+    });
+  });
+</script>
+{% endblock %}
