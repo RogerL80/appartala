@@ -23,7 +23,7 @@ include('includes/templateEngine.inc.php');
 
 // Cargamos la plantilla
 $twig->display('index_twig.html',array(
-  "titulo" => "Appartala... la q tu quieras Git",
+  "titulo" => "Appartala... Una nueva versión",
   "sesion" => $tsesion,
   "alerta" => $alerta
 ));
